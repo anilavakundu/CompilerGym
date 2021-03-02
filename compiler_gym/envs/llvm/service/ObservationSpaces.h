@@ -39,8 +39,10 @@ enum class LlvmObservationSpace {
   //     and Analysis. ArXiv:2003.10536. https://arxiv.org/abs/2003.10536
   PROGRAML,
   // A JSON dictionary of properties describing the CPU.
-  MOCKIR2VEC,
-  //mock ir2vec integration
+  //ir2vec observation for FlowAware Program embeddings
+  IR2VECFA,
+  //ir2vec observation for Symbolic Program embeddings
+  IR2VECSYM,
   CPU_INFO,
   // The number of LLVM-IR instructions in the current module.
   IR_INSTRUCTION_COUNT,

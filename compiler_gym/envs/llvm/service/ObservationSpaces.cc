@@ -66,7 +66,24 @@ std::vector<ObservationSpace> getLlvmObservationSpaceList() {
             defaultValue.begin(), defaultValue.end()};
         break;
       }
-      case LlvmObservationSpace::MOCKIR2VEC: {
+      case LlvmObservationSpace::IR2VECFA:{
+        ScalarRange featureSize;
+        featureSize.mutable_min()->set_value(0.0);
+        std::vector<ScalarRange> featureSizes;
+        featureSizes.reserve(ir2vecDim);
+        for (int i = 0; i < ir2vecDim; ++i) {
+          featureSizes.push_back(featureSize);
+        }
+        *space.mutable_double_range_list()->mutable_range() = {featureSizes.begin(),
+                                                              featureSizes.end()};
+        space.set_deterministic(true);
+        space.set_platform_dependent(false);
+        std::vector<double> defaultValue(ir2vecDim, 0.0);
+        *space.mutable_default_value()->mutable_double_list()->mutable_value() = {
+            defaultValue.begin(), defaultValue.end()};
+        break;
+      }
+      case LlvmObservationSpace::IR2VECSYM: {
         ScalarRange featureSize;
         featureSize.mutable_min()->set_value(0.0);
         std::vector<ScalarRange> featureSizes;

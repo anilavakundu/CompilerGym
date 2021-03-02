@@ -282,8 +282,14 @@ Status LlvmSession::getObservation(LlvmObservationSpace space, Observation* repl
       *reply->mutable_int64_list()->mutable_value() = {features.begin(), features.end()};
       break;
     }
-    case LlvmObservationSpace::MOCKIR2VEC: {
+    case LlvmObservationSpace::IR2VECSYM: {
       IR2Vec::IR2VecTy test= IR2Vec::IR2VecTy(benchmark().module(),IR2Vec::IR2VecMode::Symbolic,ir2vecEmbeddingsPath.string());
+      const auto features = test.getProgramVector();
+      *reply->mutable_double_list()->mutable_value() = {features.begin(), features.end()};
+      break;
+    }
+    case LlvmObservationSpace::IR2VECFA: {
+      IR2Vec::IR2VecTy test= IR2Vec::IR2VecTy(benchmark().module(),IR2Vec::IR2VecMode::FlowAware,ir2vecEmbeddingsPath.string());
       const auto features = test.getProgramVector();
       *reply->mutable_double_list()->mutable_value() = {features.begin(), features.end()};
       break;
