@@ -58,6 +58,7 @@ setuptools.setup(
         "compiler_gym.third_party",
         "compiler_gym.third_party.autophase",
         "compiler_gym.third_party.llvm",
+        "compiler_gym.third_party.ir2vec"
         "compiler_gym.third_party.inst2vec",
         "compiler_gym.util",
         "compiler_gym.util.flags",
@@ -74,6 +75,7 @@ setuptools.setup(
             "third_party/inst2vec/*.pickle",
             "third_party/cBench/benchmarks.txt",
             "third_party/cBench/cBench-v0/*",
+            "third_party/ir2vec/seedEmbeddingVocab-300-llvm10.txt", # for seedembedding in IR2Vec
             "third_party/cBench/runtime_data/**/*",
             "third_party/llvm/*",
         ]

@@ -19,6 +19,8 @@ namespace compiler_gym::llvm_service {
 
 // The number of features in the Autophase feature vector.
 static constexpr size_t kAutophaseFeatureDim = 56;
+//ir2vec
+static constexpr size_t ir2vecDim = 300;
 // 4096 is the maximum path length for most filesystems.
 static constexpr size_t kMaximumPathLength = 4096;
 
@@ -61,6 +63,23 @@ std::vector<ObservationSpace> getLlvmObservationSpaceList() {
         space.set_platform_dependent(false);
         std::vector<int64_t> defaultValue(kAutophaseFeatureDim, 0);
         *space.mutable_default_value()->mutable_int64_list()->mutable_value() = {
+            defaultValue.begin(), defaultValue.end()};
+        break;
+      }
+      case LlvmObservationSpace::MOCKIR2VEC: {
+        ScalarRange featureSize;
+        featureSize.mutable_min()->set_value(0.0);
+        std::vector<ScalarRange> featureSizes;
+        featureSizes.reserve(ir2vecDim);
+        for (int i = 0; i < ir2vecDim; ++i) {
+          featureSizes.push_back(featureSize);
+        }
+        *space.mutable_double_range_list()->mutable_range() = {featureSizes.begin(),
+                                                              featureSizes.end()};
+        space.set_deterministic(true);
+        space.set_platform_dependent(false);
+        std::vector<double> defaultValue(ir2vecDim, 0.0);
+        *space.mutable_default_value()->mutable_double_list()->mutable_value() = {
             defaultValue.begin(), defaultValue.end()};
         break;
       }

@@ -21,6 +21,8 @@
 #include "compiler_gym/util/GrpcStatusMacros.h"
 #include "compiler_gym/util/RunfilesPath.h"
 #include "llvm/Bitcode/BitcodeWriter.h"
+#include "compiler_gym/util/RunfilesPath.h"
+#include "compiler_gym/third_party/ir2vec/include/IR2Vec.h"
 #include "llvm/CodeGen/Passes.h"
 #include "llvm/IR/DebugInfo.h"
 #include "llvm/IR/LegacyPassManager.h"
@@ -36,6 +38,8 @@
 #include "programl/ir/llvm/llvm.h"
 
 namespace fs = boost::filesystem;
+
+const auto ir2vecEmbeddingsPath=compiler_gym::util::getRunfilesPath("compiler_gym/third_party/ir2vec/seedEmbeddingVocab-300-llvm10.txt");
 
 namespace compiler_gym::llvm_service {
 
@@ -276,6 +280,12 @@ Status LlvmSession::getObservation(LlvmObservationSpace space, Observation* repl
     case LlvmObservationSpace::AUTOPHASE: {
       const auto features = autophase::InstCount::getFeatureVector(benchmark().module());
       *reply->mutable_int64_list()->mutable_value() = {features.begin(), features.end()};
+      break;
+    }
+    case LlvmObservationSpace::MOCKIR2VEC: {
+      IR2Vec::IR2VecTy test= IR2Vec::IR2VecTy(benchmark().module(),IR2Vec::IR2VecMode::Symbolic,ir2vecEmbeddingsPath.string());
+      const auto features = test.getProgramVector();
+      *reply->mutable_double_list()->mutable_value() = {features.begin(), features.end()};
       break;
     }
     case LlvmObservationSpace::PROGRAML: {
